@@ -47,7 +47,7 @@ if __name__ == "__main__":
     parser.add_argument("--saved_dir", default = ".", type = str)
     args = parser.parse_args()
 
-    args.dst = f"{args.saved_dir}/pkl/{args.case_name}/{args.model.lower()}_{args.basic_model.lower()}"
+    
     
     print(args)
     os.environ["CUDA_VISIBLE_DEVICES"] = args.device
@@ -66,6 +66,8 @@ if __name__ == "__main__":
                                      transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])])
     TOP_RATE = 0.1
     for step, case_name in enumerate(case_names):
+        args.dst = f"{args.saved_dir}/pkl/{case_name}/{args.model.lower()}_{args.basic_model.lower()}"
+
         data_path, train_path, val_path, num_class = get_dataset(case_name)
         data_path = data_path + train_path
 
