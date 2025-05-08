@@ -116,7 +116,10 @@ if __name__ == "__main__":
     parser.add_argument('--l2', default = [], type = int, nargs = "+", help = "Select the node to drop")
     parser.add_argument('--l3', default = [], type = int, nargs = "+", help = "Select the node to drop")
     parser.add_argument('--l4', default = [], type = int, nargs = "+", help = "Select the node to drop")
+    parser.add_argument("--saved_dir", default = ".", type = str)
     args = parser.parse_args()
+
+    args.dst = f"{args.saved_dir}/pkl/{args.case_name}/{args.model.lower()}_{args.basic_model.lower()}"
 
     print("Calculate accuracy !!")
     os.environ["CUDA_VISIBLE_DEVICES"] = args.device
@@ -138,7 +141,7 @@ if __name__ == "__main__":
         num_class = int(num_class * 0.8 + 0.5)
     
     model = load_model(args.model, args.basic_model.lower(), num_class)
-    load_weight(model, f"./pkl/{case_name}/{args.model.lower()}_{args.basic_model}/best_model.pkl")
+    load_weight(model, f"{args.dst}/best_model.pkl")
     model.eval()
 
     post_name = ""

@@ -78,10 +78,13 @@ if __name__ == "__main__":
     parser.add_argument('--w_mode', default = "best", choices=['best', 'last'], type = str)
     parser.add_argument('--all_class', default = False, action = "store_true", help = "if true, generate the whole dataset's classes MCP distribution.")
     parser.add_argument('--few_shot', default = False, action = "store_true")
+    parser.add_argument("--saved_dir", default = ".", type = str)
 
     args = parser.parse_args()
     print("Calculate the class MCP distribution !!")
     os.environ["CUDA_VISIBLE_DEVICES"] = args.device
+    args.dst = f"{args.saved_dir}/pkl/{args.case_name}/{args.model.lower()}_{args.basic_model.lower()}"
+
 
     case_name = args.case_name
     args, image_size = get_model_set(args)
@@ -100,7 +103,7 @@ if __name__ == "__main__":
         num_class = int(num_class * 0.8 + 0.5)
     
     model = load_model(args.model, args.basic_model.lower(), num_class)
-    trained_param_path = f"./pkl/{args.case_name}/{args.model.lower()}_{args.basic_model}/{args.w_mode}_model.pkl"
+    trained_param_path = f"{args.dst}/{args.w_mode}_model.pkl"
     load_weight(model, trained_param_path)
     model.eval()
 

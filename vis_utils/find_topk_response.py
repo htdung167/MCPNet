@@ -44,7 +44,10 @@ if __name__ == "__main__":
     parser.add_argument('--concept_per_layer', default = [32, 32, 32, 32], type = int, nargs = "+")
     parser.add_argument('--eigen_topk', default = 1, type = int)
     parser.add_argument('--use_CLS_token', action = "store_true", default = False)
+    parser.add_argument("--saved_dir", default = ".", type = str)
     args = parser.parse_args()
+
+    args.dst = f"{args.saved_dir}/pkl/{args.case_name}/{args.model.lower()}_{args.basic_model.lower()}"
     
     print(args)
     os.environ["CUDA_VISIBLE_DEVICES"] = args.device
@@ -76,7 +79,7 @@ if __name__ == "__main__":
         concept_vecs, concept_means = load_concept(concept_covs, concept_means, args.eigen_topk)
 
         model = load_model(args.model, args.basic_model, num_class).cuda()
-        trained_param_path = f"./pkl/{case_name}/{args.model.lower()}_{args.basic_model}/best_model.pkl"
+        trained_param_path = f"{args.dst}/best_model.pkl"
         load_weight(model, trained_param_path)
         
         max_resp_path = [np.array([]),

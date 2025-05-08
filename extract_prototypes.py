@@ -119,9 +119,12 @@ if __name__ == "__main__":
     parser.add_argument('--basic_model', default = "resnet50", type = str)
     parser.add_argument('--model', default = "aix_model", type = str)
     parser.add_argument('--w_mode', default = "best", choices=['best', 'last'], type = str)
+    parser.add_argument("--saved_dir", default = ".", type = str)
     args = parser.parse_args()
     
     os.environ["CUDA_VISIBLE_DEVICES"] = args.device
+
+    args.dst = f"{args.saved_dir}/pkl/{args.case_name}/{args.model.lower()}_{args.basic_model.lower()}"
 
     os.makedirs(f"./PCA_concept_specific_tmp/{args.case_name}/{args.basic_model}/", exist_ok = True)
     data_path, train_path, val_path, num_class = get_dataset(args.case_name)
@@ -143,7 +146,7 @@ if __name__ == "__main__":
     print(args)
 
     train_loader = load_dataset(data_path, image_size, args)
-    trained_param_path = f"./pkl/{args.case_name}/{args.model.lower()}_{args.basic_model}/best_model.pkl"
+    trained_param_path = f"{args.dst}/best_model.pkl"
     load_weight(model, trained_param_path)
         
     post_name = ""

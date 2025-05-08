@@ -102,9 +102,12 @@ if __name__ == "__main__":
     parser.add_argument('--eigen_topk', default = 1, type = int)
     parser.add_argument('--heatmap', action = "store_true", default = False)
     parser.add_argument('--masked', action = "store_true", default = False)
+    parser.add_argument("--saved_dir", default = ".", type = str)
     args = parser.parse_args()
     os.environ["CUDA_VISIBLE_DEVICES"] = args.device
     print(args)
+
+    args.dst = f"{args.saved_dir}/pkl/{args.case_name}/{args.model.lower()}_{args.basic_model.lower()}"
 
     nrow = args.topk
     
@@ -147,7 +150,7 @@ if __name__ == "__main__":
         if args.model.lower() != "aix_model":
             post_name = "_resp"
         model = load_model(args.model, args.basic_model, num_class)
-        trained_param_path = f"./pkl/{args.case_name}/{args.model.lower()}_{args.basic_model}/best_model.pkl"
+        trained_param_path = f"{args.dst}/best_model.pkl"
         print(trained_param_path)
         load_weight(model, trained_param_path)
         
